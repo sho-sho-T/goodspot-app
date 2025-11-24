@@ -1,3 +1,6 @@
 {
-    "prisma.pinToPrisma6": true
+    "prisma.pinToPrisma6": true,
+    "biome.format": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome",
 }
