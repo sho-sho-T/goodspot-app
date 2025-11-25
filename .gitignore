@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-supabase/
-/app/generated/prisma
+src/external/supabase
+src/external/db/generated
