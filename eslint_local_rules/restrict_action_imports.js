@@ -1,3 +1,4 @@
+// eslint rule: "use client" が付いていないコンポーネントからの *.action.ts インポートを禁止する
 module.exports = {
   meta: {
     type: 'problem',

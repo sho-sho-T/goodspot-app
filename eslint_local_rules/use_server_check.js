@@ -1,3 +1,4 @@
+// eslint rule: *.action.ts ファイルの先頭で 'use server' が宣言されていることを保証する
 module.exports = {
   meta: {
     type: 'problem',

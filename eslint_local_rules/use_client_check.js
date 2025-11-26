@@ -1,3 +1,4 @@
+// eslint rule: client系コンポーネント・providers・UIコンポーネントに 'use client' を強制し、app直下では禁止する
 const path = require('path')
 
 module.exports = {

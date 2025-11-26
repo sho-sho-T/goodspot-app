@@ -5,19 +5,25 @@ import { fileURLToPath } from 'url'
 
 // @ts-check
 
+// ESM環境でCommonJS互換性を確保するための設定
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const require = createRequire(import.meta.url)
 
+// 旧形式のESLint設定をFlat Config形式に変換するアダプター
 const compat = new FlatCompat({
   baseDirectory: __dirname,
 })
 
+// カスタムリンタールールをインポート
 const localRules = require('./eslint_local_rules')
 
 const eslintConfig = [
+  // Next.js / TypeScript / Prettier の推奨設定を適用
   ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
   ...compat.plugins('prettier'),
+
+  // リントチェック対象外のディレクトリ・ファイルを指定
   {
     ignores: [
       '.next/**',
@@ -29,12 +35,16 @@ const eslintConfig = [
       '**/*.d.ts',
     ],
   },
+
+  // カスタムルールファイル自体では require を許可
   {
     files: ['eslint_local_rules/**/*.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
     },
   },
+
+  // すべてのTypeScript/JavaScriptファイルに適用する基本ルール
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     plugins: {
@@ -43,24 +53,30 @@ const eslintConfig = [
       },
     },
     rules: {
+      // Prettierのフォーマット違反をエラーとして検出
       'prettier/prettier': 'error',
-      'local-rules/use_server-check': 'error',
-      'local-rules/use_client-check': 'error',
-      'local-rules/restrict_service_imports': 'error',
-      'local-rules/require_server_only': 'error',
-      'local-rules/restrict_action_imports': 'error',
-      'local-rules/use_nextjs_helpers': 'error',
-      'local-rules/no_external_domain_imports': 'off',
+
+      // カスタムリンタールールを有効化
+      'local-rules/use_server_check': 'error', // *.action.ts で 'use server' を必須化
+      'local-rules/use_client_check': 'error', // クライアントコンポーネントに 'use client' を必須化
+      'local-rules/restrict_service_imports': 'error', // services のインポートを制限
+      'local-rules/require_server_only': 'error', // サーバーサイド専用ファイルで 'server-only' を必須化
+      'local-rules/restrict_action_imports': 'error', // action のインポートを制限
+      'local-rules/use_nextjs_helpers': 'error', // PageProps / LayoutProps の利用を促進
+      'local-rules/no_external_domain_imports': 'off', // デフォルトでは無効（ディレクトリごとに制御）
+
+      // インポート文の順序とグルーピングを統一
       'import/order': [
         'error',
         {
           groups: [
-            ['builtin', 'external'],
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'type',
+            ['builtin', 'external'], // Node.js組み込み・外部パッケージ
+            'internal', // プロジェクト内部
+            ['parent', 'sibling', 'index'], // 相対パス
+            'type', // 型インポート
           ],
           pathGroups: [
+            // React / Next.js を最優先
             {
               pattern: 'react',
               group: 'builtin',
@@ -76,6 +92,7 @@ const eslintConfig = [
               group: 'builtin',
               position: 'before',
             },
+            // features / shared / external の順序を制御
             {
               pattern: '@/features/**',
               group: 'internal',
@@ -93,20 +110,22 @@ const eslintConfig = [
             },
           ],
           pathGroupsExcludedImportTypes: ['type'],
-          'newlines-between': 'always',
+          'newlines-between': 'always', // グループ間に空行を挿入
           alphabetize: {
-            order: 'asc',
+            order: 'asc', // アルファベット昇順
             caseInsensitive: true,
           },
           // Separate type imports and group them at the end
           warnOnUnassignedImports: false,
         },
       ],
-      // Additional rule to separate type imports
+      // 型インポートはトップレベルで分離
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
-      // Group imports from the same module
+
+      // 同一モジュールからの重複インポートを防止
       'import/no-duplicates': ['error', { 'prefer-inline': false }],
-      // Detect unused imports
+
+      // 未使用変数を検出（_プレフィックスは除外）
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -117,18 +136,24 @@ const eslintConfig = [
       ],
     },
   },
+
+  // features / shared / app 配下では external/domain のインポートを禁止
   {
     files: ['src/features/**', 'src/shared/**', 'src/app/**'],
     rules: {
       'local-rules/no_external_domain_imports': 'error',
     },
   },
+
+  // external 配下では external/domain のインポートを許可
   {
     files: ['src/external/**'],
     rules: {
       'local-rules/no_external_domain_imports': 'off',
     },
   },
+
+  // 型定義ファイルでは external/domain のインポートを許可（再エクスポート用）
   {
     files: ['src/features/**/types/**', 'src/shared/**/types/**'],
     rules: {

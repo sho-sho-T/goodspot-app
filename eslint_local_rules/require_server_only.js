@@ -1,3 +1,4 @@
+// eslint rule: サーバー用の特定ファイルで "server-only" のインポートを必須にする
 module.exports = {
 	meta: {
 		type: "problem",

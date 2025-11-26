@@ -1,3 +1,4 @@
+// eslint rule: externalレイヤー以外から '@/external/domain/**' をインポートすることを禁止する
 module.exports = {
 	meta: {
 		type: "problem",

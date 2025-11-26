@@ -1,3 +1,4 @@
+// eslint rule: external/services からの import を handlers の *.command.ts / *.query.ts に限定する
 module.exports = {
   meta: {
     type: 'problem',

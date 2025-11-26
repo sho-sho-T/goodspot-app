@@ -1,3 +1,4 @@
+// eslint rule: app配下の page.tsx / layout.tsx で props を使うときに PageProps / LayoutProps の利用を促す
 module.exports = {
   meta: {
     type: 'suggestion',

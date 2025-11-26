@@ -1,3 +1,4 @@
+// eslint plugin: 各カスタムルールをエクスポートするインデックス
 module.exports = {
   'use-server-check': require('./use-server-check'),
   'use-client-check': require('./use-client-check'),
