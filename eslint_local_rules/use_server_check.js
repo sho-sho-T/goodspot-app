@@ -2,7 +2,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: `Ensure *.action.ts files have 'use server' as the first line`,
+      description: `*.action.ts ファイルが先頭で 'use server' を宣言していることを保証する`,
       recommended: true,
     },
     fixable: 'code',
@@ -17,6 +17,7 @@ module.exports = {
 
     return {
       'Program:exit'(node) {
+        // 'use server' の ExpressionStatement を全て取得
         const useServerStatements = node.body.filter(
           (statement) =>
             statement.type === 'ExpressionStatement' &&
@@ -26,6 +27,7 @@ module.exports = {
         )
 
         if (useServerStatements.length === 0) {
+          // 1 つも無ければ先頭に追加する修正を提案
           context.report({
             node,
             loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
@@ -47,6 +49,7 @@ module.exports = {
             firstStatement.expression.value === 'use server'
           )
         ) {
+          // 先頭以外にある場合も先頭へ移動させる修正を提示
           context.report({
             node: firstStatement || node,
             message: `*.action.ts files must start with 'use server' directive`,
@@ -56,6 +59,7 @@ module.exports = {
           })
         }
 
+        // 複数存在していたら 2 つ目以降を削除
         useServerStatements.slice(1).forEach((statement) => {
           context.report({
             node: statement,

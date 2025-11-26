@@ -3,7 +3,7 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        'Restrict imports from external/services to only handlers/*.command.ts and handlers/*.query.ts files',
+        "external/services からの import を handlers の *.command.ts / *.query.ts に限定する",
       category: 'Best Practices',
       recommended: true,
     },
@@ -18,12 +18,12 @@ module.exports = {
         const importPath = node.source.value
         const filename = context.getFilename()
 
-        // Check if importing from external/services
+        // external/services 配下からの import でなければスキップ
         if (!importPath.includes('/external/services/')) {
           return
         }
 
-        // Allow imports in handler command and query files
+        // handlers/<domain>/<name>.command.ts / .query.ts のみ許可
         const isHandlerCommand =
           /\/external\/handlers\/[^/]+\/[^/]+\.command\.ts$/.test(filename)
         const isHandlerQuery =
@@ -33,7 +33,7 @@ module.exports = {
           return
         }
 
-        // Report error for imports from other files
+        // その他のファイルで import していたら報告
         context.report({
           node,
           messageId: 'invalidServiceImport',

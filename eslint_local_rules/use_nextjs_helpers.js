@@ -3,7 +3,7 @@ module.exports = {
     type: 'suggestion',
     docs: {
       description:
-        'Enforce using PageProps or LayoutProps in app directory page.tsx and layout.tsx files when props are used',
+        'app 配下の page.tsx / layout.tsx で props を受け取る場合は PageProps / LayoutProps を使う',
       category: 'Best Practices',
       recommended: true,
     },
@@ -14,12 +14,12 @@ module.exports = {
   create(context) {
     const filename = context.getFilename()
 
-    // Only check files in app directory
+    // app ディレクトリ以外は対象外
     if (!filename.includes('/app/') && !filename.includes('\\app\\')) {
       return {}
     }
 
-    // Only check page.tsx and layout.tsx files
+    // page.tsx と layout.tsx のみを検査
     const isPageFile =
       filename.endsWith('/page.tsx') || filename.endsWith('\\page.tsx')
     const isLayoutFile =
@@ -46,14 +46,14 @@ module.exports = {
             ? node.declaration
             : node.declaration
 
-        // Check if function has parameters
+        // props がないなら型チェック不要
         if (!functionNode.params || functionNode.params.length === 0) {
           return
         }
 
         const firstParam = functionNode.params[0]
 
-        // Skip if destructuring children only (common pattern for layouts without other props)
+        // children のみを受け取るパターン（レイアウト）ならスキップ
         if (
           firstParam.type === 'ObjectPattern' &&
           firstParam.properties.length === 1 &&
@@ -64,14 +64,14 @@ module.exports = {
           return
         }
 
-        // Check if the parameter has a type annotation
+        // 型注釈が無い場合は Next.js 側の補助型を強制できない
         if (!firstParam.typeAnnotation) {
           return
         }
 
         const typeAnnotation = firstParam.typeAnnotation.typeAnnotation
 
-        // Check if it's using PageProps or LayoutProps
+        // PageProps / LayoutProps が使われているか検証
         const hasCorrectType = checkTypeAnnotation(
           typeAnnotation,
           isPageFile ? 'PageProps' : 'LayoutProps'
@@ -85,18 +85,21 @@ module.exports = {
             message: `Use ${helperType} for type-safe props in ${isPageFile ? 'page.tsx' : 'layout.tsx'} files`,
             fix(fixer) {
               // Replace the type annotation
-              if (typeAnnotation && typeAnnotation.range) {
-                // Extract the route path from the file path
-                const routePath = extractRoutePath(
-                  filename,
-                  isPageFile,
-                  isLayoutFile
-                )
-
-                const newType = `${helperType}<'${routePath}'>`
-
-                return fixer.replaceTextRange(typeAnnotation.range, newType)
+              const range = typeAnnotation?.range
+              if (!range) {
+                return null
               }
+
+              // Extract the route path from the file path
+              const routePath = extractRoutePath(
+                filename,
+                isPageFile,
+                isLayoutFile
+              )
+
+              const newType = `${helperType}<'${routePath}'>`
+
+              return fixer.replaceTextRange(range, newType)
             },
           })
         }

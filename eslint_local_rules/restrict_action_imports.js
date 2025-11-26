@@ -3,7 +3,7 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        'Restrict action.ts imports to components with "use client" directive',
+        '"use client" 宣言のあるコンポーネントだけが *.action.ts をインポートできるように制限する',
       category: 'Best Practices',
       recommended: true,
     },
@@ -19,18 +19,18 @@ module.exports = {
       ImportDeclaration(node) {
         const filename = context.getFilename()
 
-        // Only check .ts and .tsx files
+        // 対象は .ts/.tsx のみ（型定義などは除外）
         if (!filename.endsWith('.tsx') && !filename.endsWith('.ts')) {
           return
         }
 
-        // Skip if this is a custom hook (use*.ts or use*.tsx)
+        // use*.ts(x) のカスタムフックはクライアント扱いのため対象外
         const basename = filename.split('/').pop()
         if (basename.startsWith('use')) {
           return
         }
 
-        // Check if importing an action.ts file
+        // *.action.ts を参照しているか判定
         const importPath = node.source.value
         if (
           !importPath.includes('.action') &&
@@ -39,11 +39,11 @@ module.exports = {
           return
         }
 
-        // Get the source code
+        // AST から先頭に 'use client' があるか確認
         const sourceCode = context.getSourceCode()
         const programNode = sourceCode.ast
 
-        // Check if file has 'use client' directive
+        // 先頭 5 行程度に 'use client' ディレクティブがあるか判定
         const hasUseClient = programNode.body.some((statement, index) => {
           // Check only the first few statements for directives
           if (index > 5) return false

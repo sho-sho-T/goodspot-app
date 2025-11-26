@@ -4,7 +4,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: `Ensure client components and providers have 'use client' as the first line`,
+      description: `client系のコンポーネント／providerが先頭に 'use client' を持つようにする`,
       recommended: true,
     },
     fixable: 'code',
@@ -13,7 +13,7 @@ module.exports = {
   create(context) {
     const filename = context.filename || context.getFilename()
 
-    // Check if file is a .tsx file (not .stories.tsx, .test.tsx, .spec.tsx)
+    // stories/test/spec を除く .tsx ファイルのみが対象
     if (
       !filename.endsWith('.tsx') ||
       filename.endsWith('.stories.tsx') ||
@@ -23,10 +23,10 @@ module.exports = {
       return {}
     }
 
-    // Get the directory path
+    // ディレクトリを解析して対象ディレクトリか判断
     const dirname = path.dirname(filename)
 
-    // Check if file is in a 'client' or 'providers' directory (including subdirectories)
+  // client / providers 以下、もしくは shared/components/ui 系の判定
     let shouldHaveUseClient = false
     let dirType = ''
 
@@ -41,13 +41,12 @@ module.exports = {
       dirType = 'providers'
     }
 
-    // Check if file is in shared/components/ui directory (including subdirectories)
     if (!shouldHaveUseClient && dirname.includes('shared/components/ui')) {
       shouldHaveUseClient = true
       dirType = 'shared/components/ui'
     }
 
-    // Check if file is directly under src/app directory (not in subdirectories)
+    // app 直下（route entry）には 'use client' を禁止する
     const isDirectlyUnderApp =
       dirname.endsWith('/src/app') || dirname.endsWith('\\src\\app')
 
@@ -56,7 +55,7 @@ module.exports = {
         const sourceCode = context.getSourceCode()
         const text = sourceCode.getText()
 
-        // Check if file starts with 'use client' directive
+        // 先頭の directive を確認
         const trimmedText = text.trim()
         const startsWithUseClient =
           trimmedText.startsWith("'use client'") ||

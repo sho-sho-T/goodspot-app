@@ -3,7 +3,7 @@ module.exports = {
 		type: "problem",
 		docs: {
 			description:
-				"Disallow importing server-only external domain modules outside the external layer",
+				"externalレイヤー以外から '@/external/domain/**' をインポートすることを禁止する",
 			category: "Best Practices",
 			recommended: false,
 		},
@@ -14,6 +14,7 @@ module.exports = {
 		},
 	},
 	create(context) {
+		// '@/external/domain/**' からのインポートを検知し、違反を報告する
 		function reportIfExternalDomainImport(source, node) {
 			if (
 				typeof source === "string" &&
@@ -25,12 +26,14 @@ module.exports = {
 
 		return {
 			ImportDeclaration(node) {
+				// ESM import のパスをチェック
 				reportIfExternalDomainImport(
 					node.source && node.source.value,
 					node.source || node,
 				);
 			},
 			CallExpression(node) {
+				// CommonJS の require 呼び出しも対象にする
 				if (
 					node.callee.type === "Identifier" &&
 					node.callee.name === "require" &&

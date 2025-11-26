@@ -2,7 +2,7 @@ module.exports = {
 	meta: {
 		type: "problem",
 		docs: {
-			description: 'Require import "server-only" in specific server files',
+			description: '特定のサーバー用ファイルに "server-only" のインポートを必須にする',
 			category: "Best Practices",
 			recommended: true,
 		},
@@ -18,7 +18,7 @@ module.exports = {
 			Program(node) {
 				const filename = context.getFilename();
 
-				// Check if file matches the patterns that require server-only
+				// server-only が必要なパスかどうかを判定
 				const requiresServerOnly =
 					// features/<feature>/servers/<name>.ts
 					/\/features\/[^/]+\/servers\/[^/]+\.ts$/.test(filename) ||
@@ -35,7 +35,7 @@ module.exports = {
 					return;
 				}
 
-				// Check if the file has import "server-only"
+				// 先頭付近に import "server-only" があるかを調べる
 				const hasServerOnlyImport = node.body.some((statement) => {
 					return (
 						statement.type === "ImportDeclaration" &&
