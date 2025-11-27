@@ -4,7 +4,7 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        "external/services からの import を handlers の *.command.ts / *.query.ts に限定する",
+        'external/services からの import を handlers の *.command.ts / *.query.ts に限定する',
       category: 'Best Practices',
       recommended: true,
     },

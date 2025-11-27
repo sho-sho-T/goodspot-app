@@ -1,7 +1,11 @@
-import { FlatCompat } from '@eslint/eslintrc'
 import { createRequire } from 'module'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import eslintPluginPrettier from 'eslint-plugin-prettier'
+import prettierConfig from 'eslint-config-prettier'
+import importPlugin from 'eslint-plugin-import'
+import typescriptEslint from '@typescript-eslint/eslint-plugin'
+import typescriptParser from '@typescript-eslint/parser'
 
 // @ts-check
 
@@ -10,18 +14,12 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const require = createRequire(import.meta.url)
 
-// 旧形式のESLint設定をFlat Config形式に変換するアダプター
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
-
 // カスタムリンタールールをインポート
 const localRules = require('./eslint_local_rules')
 
 const eslintConfig = [
-  // Next.js / TypeScript / Prettier の推奨設定を適用
-  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
-  ...compat.plugins('prettier'),
+  // Prettier との競合を避けるための設定
+  prettierConfig,
 
   // リントチェック対象外のディレクトリ・ファイルを指定
   {
@@ -47,23 +45,33 @@ const eslintConfig = [
   // すべてのTypeScript/JavaScriptファイルに適用する基本ルール
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
     plugins: {
       'local-rules': {
         rules: localRules,
       },
+      prettier: eslintPluginPrettier,
+      import: importPlugin,
+      '@typescript-eslint': typescriptEslint,
     },
     rules: {
       // Prettierのフォーマット違反をエラーとして検出
       'prettier/prettier': 'error',
 
       // カスタムリンタールールを有効化
-      'local-rules/use_server_check': 'error', // *.action.ts で 'use server' を必須化
-      'local-rules/use_client_check': 'error', // クライアントコンポーネントに 'use client' を必須化
-      'local-rules/restrict_service_imports': 'error', // services のインポートを制限
-      'local-rules/require_server_only': 'error', // サーバーサイド専用ファイルで 'server-only' を必須化
-      'local-rules/restrict_action_imports': 'error', // action のインポートを制限
-      'local-rules/use_nextjs_helpers': 'error', // PageProps / LayoutProps の利用を促進
-      'local-rules/no_external_domain_imports': 'off', // デフォルトでは無効（ディレクトリごとに制御）
+      'local-rules/use-server-check': 'error', // *.action.ts で 'use server' を必須化
+      'local-rules/use-client-check': 'error', // クライアントコンポーネントに 'use client' を必須化
+      'local-rules/restrict-service-imports': 'error', // services のインポートを制限
+      'local-rules/require-server-only': 'error', // サーバーサイド専用ファイルで 'server-only' を必須化
+      'local-rules/restrict-action-imports': 'error', // action のインポートを制限
+      'local-rules/use-nextjs-helpers': 'error', // PageProps / LayoutProps の利用を促進
+      'local-rules/no-external-domain-imports': 'error', // デフォルトでは無効（ディレクトリごとに制御）
 
       // インポート文の順序とグルーピングを統一
       'import/order': [
@@ -141,7 +149,7 @@ const eslintConfig = [
   {
     files: ['src/features/**', 'src/shared/**', 'src/app/**'],
     rules: {
-      'local-rules/no_external_domain_imports': 'error',
+      'local-rules/no-external-domain-imports': 'error',
     },
   },
 
@@ -149,7 +157,7 @@ const eslintConfig = [
   {
     files: ['src/external/**'],
     rules: {
-      'local-rules/no_external_domain_imports': 'off',
+      'local-rules/no-external-domain-imports': 'off',
     },
   },
 
@@ -157,7 +165,7 @@ const eslintConfig = [
   {
     files: ['src/features/**/types/**', 'src/shared/**/types/**'],
     rules: {
-      'local-rules/no_external_domain_imports': 'off',
+      'local-rules/no-external-domain-imports': 'off',
     },
   },
 ]

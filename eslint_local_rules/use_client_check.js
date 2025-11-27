@@ -27,7 +27,7 @@ module.exports = {
     // ディレクトリを解析して対象ディレクトリか判断
     const dirname = path.dirname(filename)
 
-  // client / providers 以下、もしくは shared/components/ui 系の判定
+    // client / providers 以下、もしくは shared/components/ui 系の判定
     let shouldHaveUseClient = false
     let dirType = ''
 
