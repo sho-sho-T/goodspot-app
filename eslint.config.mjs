@@ -31,6 +31,17 @@ const eslintConfig = [
       'build/**',
       'test-runner-jest.config.js',
       '**/*.d.ts',
+      // 自動生成ファイル / バイナリ / ランタイムを明示的に除外して lint の対象を減らす
+      // Prisma の generated クライアントなど（大量の .js/.wasm/.dylib が含まれる）
+      'src/external/**/generated/**',
+      // runtime や wasm ローダー、バイナリなど
+      'src/external/**/runtime/**',
+      'src/external/**/wasm-*.mjs',
+      'src/external/**/wasm-*.js',
+      'src/external/**/query_engine_bg.*',
+      'src/external/**/libquery_engine-*.dylib.*',
+      // public 配下の静的ファイルは lint 不要
+      'public/**',
     ],
   },
 
