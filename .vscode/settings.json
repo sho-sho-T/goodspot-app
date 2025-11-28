@@ -9,5 +9,7 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "deno.enable": true,
+  "deno.unstable": true
 }
