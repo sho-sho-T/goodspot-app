@@ -10,6 +10,6 @@
     "typescript",
     "typescriptreact"
   ],
-  "deno.enable": true,
+  "deno.enablePaths": ["src/external/supabase/functions"],
   "deno.unstable": true
 }
