@@ -4,13 +4,19 @@ import { createServerClient } from '@supabase/ssr'
 
 import type { NextRequest } from 'next/server'
 
+/**
+ * Supabaseのセッションを更新するためのミドルウェア関数です。
+ *
+ * サーバーコンポーネントへのリクエスト前に実行され、認証トークン（Cookie）のリフレッシュを行います。
+ * これにより、サーバーサイドレンダリング時に常に最新の認証状態を維持できます。
+ */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
 
-  // With Fluid compute, don't put this client in a global environment
-  // variable. Always create a new one on each request.
+  // グローバル変数にクライアントを保持せず、リクエストごとに新しいクライアントを作成してください。
+  // これにより、異なるユーザーのリクエスト間で認証情報が混在するのを防ぎます。
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_KEY!,
@@ -20,6 +26,8 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
+          // Cookieをリクエストとレスポンスの両方に設定します。
+          // これにより、後続の処理でも更新されたCookieが利用可能になります。
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
@@ -34,12 +42,12 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  // createServerClientとsupabase.auth.getClaims()の間には、他の処理を挟まないでください。
+  // ここで処理が入ると、予期せぬタイミングでユーザーがログアウトされるなどの問題が発生し、
+  // デバッグが困難になる可能性があります。
 
-  // IMPORTANT: If you remove getClaims() and you use server-side rendering
-  // with the Supabase client, your users may be randomly logged out.
+  // 重要: getClaims()（またはgetUser()）を削除しないでください。
+  // これを呼び出すことで、必要に応じてAuthトークンがリフレッシュされ、Cookieが更新されます。
   const { data } = await supabase.auth.getClaims()
   const user = data?.claims
 
@@ -48,24 +56,20 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/auth')
   ) {
-    // no user, potentially respond by redirecting the user to the login page
+    // ユーザーが認証されておらず、かつログインページや認証関連のパスでない場合、
+    // ログインページへリダイレクトします。
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     return NextResponse.redirect(url)
   }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
-  // If you're creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  // 重要: ここで作成した supabaseResponse オブジェクトをそのまま返す必要があります。
+  // もし NextResponse.next() で新しいレスポンスを作成する場合は、以下の点に注意してください：
+  // 1. リクエストを渡す: const myNewResponse = NextResponse.next({ request })
+  // 2. Cookieをコピーする: myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
+  // 3. myNewResponse を変更する（ただしCookieは変更しない！）
+  // 4. 最後に myNewResponse を返す
+  // これを守らないと、ブラウザとサーバーでセッションの不整合が起き、ユーザーがログアウトされる可能性があります。
 
   return supabaseResponse
 }
