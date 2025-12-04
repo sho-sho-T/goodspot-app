@@ -11,5 +11,8 @@
     "typescriptreact"
   ],
   "deno.enablePaths": ["src/external/supabase/functions"],
-  "deno.unstable": true
+  "deno.unstable": true,
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }
