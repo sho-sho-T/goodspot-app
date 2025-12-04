@@ -59,7 +59,7 @@ export async function updateSession(request: NextRequest) {
     // ユーザーが認証されておらず、かつログインページや認証関連のパスでない場合、
     // ログインページへリダイレクトします。
     const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
+    url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
