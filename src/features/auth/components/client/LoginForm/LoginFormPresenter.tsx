@@ -26,7 +26,7 @@ export const LoginFormPresenter = (props: LoginFormPresenterProps) => {
             <div className="flex flex-col gap-6">
               {error && <p className="text-destructive-500 text-sm">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Continue with GitHub'}
+                {isLoading ? 'Logging in...' : 'Continue with Google'}
               </Button>
             </div>
           </form>
