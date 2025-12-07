@@ -1,26 +1,46 @@
 import { NextResponse } from 'next/server'
-
-// The client you created from the Server-Side Auth instructions
-import { createAuthClient } from '@/external/supabase/server'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // if "next" is in param, use it as the redirect URL
+
+  // "next" パラメータの処理
   let next = searchParams.get('next') ?? '/'
   if (!next.startsWith('/')) {
-    // if "next" is not a relative URL, use the default
     next = '/'
   }
 
   if (code) {
-    const supabase = await createAuthClient()
+    const cookieStore = await cookies()
+
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
+
+    // セッション交換を実行
+    // この処理の中で上記の setAll が呼ばれ、ブラウザにCookieが保存されます
     const { error } = await supabase.auth.exchangeCodeForSession(code)
+
     if (!error) {
-      const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
+      const forwardedHost = request.headers.get('x-forwarded-host')
       const isLocalEnv = process.env.NODE_ENV === 'development'
+
       if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
         return NextResponse.redirect(`${origin}${next}`)
       } else if (forwardedHost) {
         return NextResponse.redirect(`https://${forwardedHost}${next}`)
@@ -30,6 +50,6 @@ export async function GET(request: Request) {
     }
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/error`)
+  // エラー時はエラーページへ
+  return NextResponse.redirect(`${origin}/error`)
 }
