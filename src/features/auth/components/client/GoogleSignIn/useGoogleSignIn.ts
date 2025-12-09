@@ -2,17 +2,17 @@ import { useState } from 'react'
 
 import { supabaseAuthClient as supabase } from '@/external/supabase/client'
 
-export type LoginFormPresenterProps = {
+export type GoogleSignInPresenterProps = {
   error: string | null
   isLoading: boolean
   onSubmit: (e: React.FormEvent) => Promise<void>
 }
 
-export const useLoginForm = (): LoginFormPresenterProps => {
+export const useGoogleSignIn = (): GoogleSignInPresenterProps => {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSocialLogin = async (e: React.FormEvent) => {
+  const handleGoogleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
@@ -35,6 +35,6 @@ export const useLoginForm = (): LoginFormPresenterProps => {
   return {
     error,
     isLoading,
-    onSubmit: handleSocialLogin,
+    onSubmit: handleGoogleSignIn,
   }
 }
