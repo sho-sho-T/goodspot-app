@@ -9,7 +9,7 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY!
 const isLocalEnv = process.env.NODE_ENV === 'development'
 const isProductionEnv = process.env.NODE_ENV === 'production'
 
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 30 // 30日
+const COOKIE_MAX_AGE = 60
 
 const getValidatedNextPath = (next: string | null): string => {
   if (!next?.startsWith('/') || !ALLOWED_NEXT_PATHS.includes(next)) {
@@ -43,7 +43,7 @@ const initSupabaseClient = async () => {
       // Supabaseが生成するcookieのデフォルト設定
       httpOnly: true, // JSアクセス不可
       secure: isProductionEnv, // 本番環境ではHTTPSのみ
-      sameSite: 'lax' as const, // CSRF対策
+      sameSite: 'lax', // CSRF対策
       maxAge: COOKIE_MAX_AGE,
     },
   })
