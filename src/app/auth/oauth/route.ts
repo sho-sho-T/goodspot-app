@@ -9,7 +9,7 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY!
 const isLocalEnv = process.env.NODE_ENV === 'development'
 const isProductionEnv = process.env.NODE_ENV === 'production'
 
-const COOKIE_MAX_AGE = 60
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 30 // 30 days
 
 const getValidatedNextPath = (next: string | null): string => {
   if (!next?.startsWith('/') || !ALLOWED_NEXT_PATHS.includes(next)) {
