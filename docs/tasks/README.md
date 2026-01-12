@@ -23,7 +23,7 @@ Goodspot の実装タスク一覧と運用ルールです。各タスクは 1〜
 | 002 | Prisma: GoodThing モデル追加 | todo | 001 | `docs/tasks/002_prisma_goodthing.md` |
 | 003 | external: DTO/Handler 実装 | todo | 002 | `docs/tasks/003_external_handlers.md` |
 | 004 | API Route 実装 | todo | 003 | `docs/tasks/004_api_routes.md` |
-| 005 | 今日は記録する画面 | todo | 004 | `docs/tasks/005_feature_today.md` |
+| 005 | 今日は記録する画面（/today） | todo | 004 | `docs/tasks/005_feature_today.md` |
 | 006 | 振り返り画面 | todo | 004 | `docs/tasks/006_feature_history.md` |
 | 007 | 掲示板画面（公開） | todo | 004 | `docs/tasks/007_feature_board.md` |
 | 008 | ナビゲーション/レイアウト整備 | todo | 005,006,007 | `docs/tasks/008_navigation.md` |

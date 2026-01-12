@@ -7,14 +7,15 @@ status: todo
 - Server Component でプリフェッチし、初期表示の体験を高速化する。
 
 ## 作業内容
-1) ルートを作成（例: `/` を今日の記録にする）。
+1) ルートを作成（`/today` を今日の記録にする）。
+2) `/` は `/today` へリダイレクト。
 2) `features/good-things` を新規作成。
 3) Server Template → Client Container → Presenter の構成で実装。
 4) `useQuery` で当日データを取得、`useMutation` で保存。
 
 ## 期待する構成例
 ```
-src/app/(authenticated)/page.tsx
+src/app/(authenticated)/today/page.tsx
 src/features/good-things/components/server/TodayPageTemplate/TodayPageTemplate.tsx
 src/features/good-things/components/client/TodayForm/
   ├── TodayFormContainer.tsx
@@ -30,11 +31,11 @@ src/features/good-things/components/client/TodayForm/
 - 保存後はトースト or メッセージ
 
 ## 受け入れ基準
-- ログイン後、`/` で当日記録が表示される。
+- ログイン後、`/today` で当日記録が表示される。
 - 3件以上の入力はできない（UI/バリデーションで制御）。
 - 保存後に画面が最新状態に反映される。
 
 ## 影響ファイル
-- 追加: `src/app/(authenticated)/page.tsx`
+- 追加: `src/app/(authenticated)/today/page.tsx`
 - 追加: `src/features/good-things/**`
-- 変更: `src/app/page.tsx`（不要なら削除/置換）
+- 変更: `src/app/page.tsx`（`/today` へリダイレクト）
