@@ -7,8 +7,8 @@ export default defineConfig({
   datasource: {
     url: process.env.DATABASE_URL || '',
   },
-  schema: 'src/external/db/prisma/schema.prisma',
+  schema: 'src/external/client/db/prisma/schema.prisma',
   migrations: {
-    path: 'src/external/db/prisma/migrations',
+    path: 'src/external/client/db/prisma/migrations',
   },
 })
