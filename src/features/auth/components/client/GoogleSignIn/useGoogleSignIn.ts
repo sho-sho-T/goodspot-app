@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { supabaseAuthClient as supabase } from '@/external/supabase/client'
+import { supabaseAuthClient as supabase } from '@/shared/lib/supabase/client'
 
 export type GoogleSignInPresenterProps = {
   error: string | null
