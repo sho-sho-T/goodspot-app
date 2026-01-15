@@ -1,6 +1,6 @@
 # 002 Prisma: GoodThing モデル追加
 
-status: todo
+status: done
 
 ## 目的
 - 良いこと記録を保存するテーブルを追加する。

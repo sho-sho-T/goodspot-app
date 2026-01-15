@@ -15,7 +15,7 @@ datasource db {
 }
 
 model Playground {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid()) @db.Uuid
   name      String
   value     Int
   createdAt DateTime @default(now())

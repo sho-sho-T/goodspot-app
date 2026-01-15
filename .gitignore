@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-src/external/db/generated
+src/external/client/db/generated
 .eslintcache

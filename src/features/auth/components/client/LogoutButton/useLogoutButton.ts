@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation'
 
-import { supabaseAuthClient as supabase } from '@/external/supabase/client'
+import { supabaseAuthClient as supabase } from '@/shared/lib/supabase/client'
 
 export type LogoutButtonPresenterProps = {
   onLogout: () => Promise<void>

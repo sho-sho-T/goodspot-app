@@ -1,48 +1,53 @@
-import { revalidatePath } from 'next/cache'
+import {
+  createPlaygroundAction,
+  deletePlaygroundAction,
+  getPlaygroundListServer,
+  updatePlaygroundValueAction,
+} from '@/external/handler/playground'
+import type {
+  CreatePlaygroundInput,
+  DeletePlaygroundInput,
+  UpdatePlaygroundInput,
+} from '@/external/handler/playground'
 
-import { prisma } from '@/shared/lib/prisma'
+// Playground 用フォームの Server Action ラッパー
+async function createPlaygroundFormAction(formData: FormData) {
+  'use server'
 
+  const name = formData.get('name')
+  const value = formData.get('value')
+  const data = {
+    name: typeof name === 'string' ? name : '',
+    value,
+  } as CreatePlaygroundInput
+  return createPlaygroundAction(data)
+}
+
+async function updatePlaygroundValueFormAction(formData: FormData) {
+  'use server'
+
+  const value = Math.floor(Math.random() * 100)
+  const id = formData.get('id')
+  const data = {
+    id,
+    value,
+  } as UpdatePlaygroundInput
+
+  return updatePlaygroundValueAction(data)
+}
+
+async function deletePlaygroundFormAction(formData: FormData) {
+  'use server'
+
+  const id = formData.get('id')
+  const data = { id } as DeletePlaygroundInput
+  return deletePlaygroundAction(data)
+}
+
+// Playground ページ本体（Server Component）
 export default async function PlaygroundPage() {
-  // Fetch all items
-  const items = await prisma.playground.findMany({
-    orderBy: { createdAt: 'desc' },
-  })
-
-  // Server Action to create an item
-  async function createItem(formData: FormData) {
-    'use server'
-    const name = formData.get('name') as string
-    const value = parseInt(formData.get('value') as string)
-
-    if (!name || isNaN(value)) return
-
-    await prisma.playground.create({
-      data: { name, value },
-    })
-    revalidatePath('/playground')
-  }
-
-  // Server Action to delete an item
-  async function deleteItem(formData: FormData) {
-    'use server'
-    const id = formData.get('id') as string
-    await prisma.playground.delete({
-      where: { id },
-    })
-    revalidatePath('/playground')
-  }
-
-  // Server Action to update an item
-  async function updateItem(formData: FormData) {
-    'use server'
-    const id = formData.get('id') as string
-    const value = Math.floor(Math.random() * 100)
-    await prisma.playground.update({
-      where: { id },
-      data: { value },
-    })
-    revalidatePath('/playground')
-  }
+  const result = await getPlaygroundListServer()
+  const items = result.success ? result.items : []
 
   return (
     <div className="mx-auto max-w-2xl p-8">
@@ -50,7 +55,7 @@ export default async function PlaygroundPage() {
 
       <div className="mb-8 rounded-lg border bg-gray-50 p-6 shadow-sm dark:bg-gray-800">
         <h2 className="mb-4 text-xl font-semibold">Create New Item</h2>
-        <form action={createItem} className="flex gap-3">
+        <form action={createPlaygroundFormAction} className="flex gap-3">
           <input
             type="text"
             name="name"
@@ -94,7 +99,7 @@ export default async function PlaygroundPage() {
               </div>
             </div>
             <div className="flex gap-2">
-              <form action={updateItem}>
+              <form action={updatePlaygroundValueFormAction}>
                 <input type="hidden" name="id" value={item.id} />
                 <button
                   type="submit"
@@ -103,7 +108,7 @@ export default async function PlaygroundPage() {
                   Random Update
                 </button>
               </form>
-              <form action={deleteItem}>
+              <form action={deletePlaygroundFormAction}>
                 <input type="hidden" name="id" value={item.id} />
                 <button
                   type="submit"

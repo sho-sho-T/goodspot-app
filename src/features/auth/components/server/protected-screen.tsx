@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 
 import { LogoutButton } from '@/features/auth/components/client/LogoutButton'
 
-import { createAuthClient } from '@/external/supabase/server'
+import { createAuthClient } from '@/external/client/supabase/server'
 
 export async function ProtectedScreen() {
   const supabase = await createAuthClient()
