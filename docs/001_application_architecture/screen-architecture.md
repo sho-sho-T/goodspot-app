@@ -31,7 +31,7 @@ app/(group)/.../page.tsx
 ## 2. ディレクトリ構成例（画面に関わる範囲）
 
 ```
-frontend/src/
+src/
 ├── app/
 │   └── (authenticated)/requests/[requestId]/page.tsx
 ├── features/
