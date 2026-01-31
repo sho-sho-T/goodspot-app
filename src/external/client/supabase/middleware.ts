@@ -30,7 +30,9 @@ export async function updateSession(request: NextRequest) {
         setAll(cookiesToSet) {
           // Cookieをリクエストとレスポンスの両方に設定します。
           // これにより、後続の処理でも更新されたCookieが利用可能になります。
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value)
+          )
           supabaseResponse = NextResponse.next({
             request,
           })

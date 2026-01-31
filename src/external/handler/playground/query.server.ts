@@ -57,4 +57,7 @@ export async function getPlaygroundListServer(
   }
 }
 
-export type { PlaygroundListInput, PlaygroundListResponse } from '@/external/dto/playground'
+export type {
+  PlaygroundListInput,
+  PlaygroundListResponse,
+} from '@/external/dto/playground'

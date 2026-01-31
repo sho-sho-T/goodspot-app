@@ -2,7 +2,10 @@
 
 import { getPlaygroundListServer } from './query.server'
 
-import type { PlaygroundListInput, PlaygroundListResponse } from './query.server'
+import type {
+  PlaygroundListInput,
+  PlaygroundListResponse,
+} from './query.server'
 
 // Playground の Server Actions（参照系）
 export async function getPlaygroundListAction(
@@ -11,4 +14,7 @@ export async function getPlaygroundListAction(
   return getPlaygroundListServer(data)
 }
 
-export type { PlaygroundListInput, PlaygroundListResponse } from './query.server'
+export type {
+  PlaygroundListInput,
+  PlaygroundListResponse,
+} from './query.server'
