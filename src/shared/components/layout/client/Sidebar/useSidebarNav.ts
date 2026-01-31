@@ -1,22 +1,20 @@
+import type { Route } from 'next'
 import { usePathname } from 'next/navigation'
 
 export type NavItem = {
   label: string
-  href: string
+  href: Route
   icon: string
 }
 
 export type SidebarPresenterProps = {
-  navItems: NavItem[]
+  navItems: readonly NavItem[]
   currentPath: string
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { label: 'Today', href: '/today', icon: 'Sun' },
-  { label: 'History', href: '/history', icon: 'Clock' },
-  { label: 'Board', href: '/board', icon: 'MessageSquare' },
+const NAV_ITEMS = [
   { label: 'Playground', href: '/playground', icon: 'FlaskConical' },
-]
+] as const satisfies readonly NavItem[]
 
 /**
  * Sidebarコンポーネントのロジックを管理するカスタムフック
