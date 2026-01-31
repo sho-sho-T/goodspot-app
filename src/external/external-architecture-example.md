@@ -58,7 +58,13 @@ export class Invoice {
   ) {}
 
   static create(customerId: string, totalAmount: number): Invoice {
-    return new Invoice(InvoiceId.generate(), InvoiceStatus.DRAFT, customerId, totalAmount, null)
+    return new Invoice(
+      InvoiceId.generate(),
+      InvoiceStatus.DRAFT,
+      customerId,
+      totalAmount,
+      null
+    )
   }
 
   issue(now = new Date()): void {
@@ -129,7 +135,10 @@ export type InvoiceDetailResponse = {
 // external/repository/db/InvoiceRepository.ts
 import { db } from '@/external/client/db/client'
 import { invoices } from '@/external/client/db/schema'
-import { InvoiceRepository as IInvoiceRepository, InvoiceId } from '@/external/domain'
+import {
+  InvoiceRepository as IInvoiceRepository,
+  InvoiceId,
+} from '@/external/domain'
 
 export class InvoiceRepository implements IInvoiceRepository {
   async findById(id: InvoiceId) {

@@ -1,11 +1,13 @@
 # Project Overview
 
 ## Purpose
+
 goodspot-app is a Next.js 16 web application using App Router. It appears to be a feature-rich application with authentication, data management, and a playground for experimentation.
 
 ## Tech Stack
 
 ### Frontend
+
 - **Framework**: Next.js 16.1.1 with App Router
 - **React**: Version 19.2.0
 - **Styling**: Tailwind CSS 4 with custom animations (tw-animate-css)
@@ -15,11 +17,13 @@ goodspot-app is a Next.js 16 web application using App Router. It appears to be 
 - **Validation**: Zod v4.1.13
 
 ### Backend/Infrastructure
+
 - **Database**: PostgreSQL with Prisma 6
 - **Authentication**: Supabase (@supabase/ssr, @supabase/supabase-js, @supabase/auth-helpers-nextjs)
 - **Caching**: Prisma Accelerate (@prisma/extension-accelerate)
 
 ### Development Tools
+
 - **Language**: TypeScript 5
 - **Linter**: ESLint 9 with custom local rules
 - **Formatter**: Prettier 3.6.2 with Tailwind plugin
@@ -39,11 +43,13 @@ src/
 ```
 
 Current features in `src/features/`:
+
 - auth
 - playground
 - system
 
 External layer subdirectories:
+
 - client/ - DB and API clients
 - domain/ - Pure domain models
 - dto/ - Data transfer objects with Zod schemas
@@ -52,6 +58,7 @@ External layer subdirectories:
 - repository/ - Data persistence
 
 ## Development Environment
+
 - **Platform**: macOS (Darwin)
 - **Package Manager**: npm (package-lock.json present, also bun.lock for alternative)
 - **Node Version**: Likely v20+ (based on @types/node)

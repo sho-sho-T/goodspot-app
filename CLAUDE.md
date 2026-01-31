@@ -5,11 +5,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Running the Application
+
 - `npm run dev` - Start Next.js development server (http://localhost:3000)
 - `npm run build` - Production build
 - `npm start` - Serve production build
 
 ### Code Quality
+
 - `npm run lint` - Run ESLint (includes custom architectural rules)
 - `npm run lint:src` - Lint only src/ directory
 - `npm run lint:fix` - Auto-fix ESLint issues
@@ -17,11 +19,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run format:check` - Check formatting without modifying
 
 ### Database
+
 - `npm run migrate` - Run Prisma migrations (dev)
 - `npm run migrate:reset` - Reset database and run migrations
 - `npm run prisma:studio` - Open Prisma Studio GUI
 
 ### Type Generation
+
 - `npm run typegen` - Generate Next.js route types (run after adding new routes in src/app)
 
 ## Architecture
@@ -59,7 +63,7 @@ The `src/external/` directory is organized into:
 - `service/` - Application services and orchestration
 - `repository/` - Repository implementations
 
-**Data flow**: features → handler/*.action.ts → handler/*.server.ts → service → repository → client/db
+**Data flow**: features → handler/_.action.ts → handler/_.server.ts → service → repository → client/db
 
 ### Component Patterns
 
@@ -91,8 +95,8 @@ features/<domain>/components/
 The project enforces architecture via ESLint:
 
 - `use-client-check` - Requires `'use client'` in client components
-- `use-server-check` - Requires `'use server'` in *.action.ts files
-- `require-server-only` - Requires `import 'server-only'` in external/service and external/handler/*.server.ts
+- `use-server-check` - Requires `'use server'` in \*.action.ts files
+- `require-server-only` - Requires `import 'server-only'` in external/service and external/handler/\*.server.ts
 - `restrict-service-imports` - Prevents direct service imports (use handlers)
 - `restrict-action-imports` - Prevents action imports outside features
 - `no-external-domain-imports` - Prevents `external/domain` imports in app/features/shared (allowed in external/ and type files)

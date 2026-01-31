@@ -45,6 +45,7 @@ This follows CQRS principles at the handler level.
 ## Data Flow Pattern
 
 ### Reading Data
+
 ```
 app/page.tsx
   → features/<domain>/components/server/<Template>.tsx
@@ -57,6 +58,7 @@ app/page.tsx
 ```
 
 ### Writing Data
+
 ```
 features/<domain>/components/client/<Widget>Container.tsx
   → features/<domain>/hooks/mutation/use<Mutation>.ts (TanStack Query)
@@ -69,6 +71,7 @@ features/<domain>/components/client/<Widget>Container.tsx
 ```
 
 **Key points**:
+
 - All external data must be validated via Zod schemas in `external/dto/`
 - Features never call services/repositories directly
 - Handlers are the only entry point to the external layer
@@ -76,7 +79,9 @@ features/<domain>/components/client/<Widget>Container.tsx
 ## Domain-Driven Design Elements
 
 ### Domain Organization
+
 Each domain gets parallel directories:
+
 ```
 domain/<domain>/           # Pure models, interfaces
 dto/<domain>/              # Zod schemas, DTOs
@@ -86,6 +91,7 @@ repository/db/<Domain>Repository.ts  # Persistence
 ```
 
 ### Domain Layer Structure
+
 ```
 domain/<domain>/
 ├── <domain>.ts                   # Aggregate/Entity
@@ -100,9 +106,11 @@ Domain models are **framework-agnostic**: no Next.js, Prisma, or DB types.
 ## React Patterns
 
 ### Container/Presenter Split
+
 Client components separate concerns:
 
 **Container** (`<Widget>Container.tsx`):
+
 - Has `'use client'` directive
 - Calls custom hooks (TanStack Query)
 - Manages local state
@@ -110,6 +118,7 @@ Client components separate concerns:
 - Passes props to Presenter
 
 **Presenter** (`<Widget>Presenter.tsx`):
+
 - Pure function component
 - No hooks (except maybe useId for accessibility)
 - No state management
@@ -117,11 +126,13 @@ Client components separate concerns:
 - Easily unit testable
 
 **Custom Hook** (`use<Widget>.ts`):
+
 - Encapsulates component-specific logic
 - Returns state and callbacks for Container
 - Can use other hooks internally
 
 ### Server Templates
+
 ```typescript
 // features/users/components/server/UserListPageTemplate/UserListPageTemplate.tsx
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query'
@@ -130,7 +141,7 @@ import { getUsersQuery } from '@/external/handler/users'
 
 export async function UserListPageTemplate() {
   const queryClient = getQueryClient()
-  
+
   // Prefetch data on server
   await queryClient.prefetchQuery({
     queryKey: ['users'],
@@ -146,6 +157,7 @@ export async function UserListPageTemplate() {
 ```
 
 Server templates:
+
 - Are Server Components (no `'use client'`)
 - Prefetch data using TanStack Query
 - Use HydrationBoundary to pass data to client
@@ -154,6 +166,7 @@ Server templates:
 ## Authentication Pattern
 
 ### Route Groups
+
 ```
 app/
 ├── (guest)/          # Public routes (login, signup)
@@ -162,6 +175,7 @@ app/
 ```
 
 ### Auth Guard in Layout
+
 ```typescript
 // app/(authenticated)/layout.tsx
 import { AuthenticatedLayoutWrapper } from '@/shared/components/layout/server'
@@ -172,12 +186,14 @@ export default function AuthenticatedLayout({ children }) {
 ```
 
 The `AuthenticatedLayoutWrapper`:
+
 - Calls `requireAuthServer()` to check session
 - Redirects to login if not authenticated
 - Renders layout (Header, Sidebar) if authenticated
 - Pages under this route don't need individual auth checks
 
 ### Auth Utilities
+
 ```
 features/auth/servers/
 ├── session.server.ts      # Single source of session retrieval
@@ -214,6 +230,7 @@ export type CreateUserResponse = z.infer<typeof CreateUserResponseSchema>
 ```
 
 Handlers validate input before processing:
+
 ```typescript
 // external/handler/users/command.server.ts
 import 'server-only'
@@ -228,6 +245,7 @@ export async function createUserCommand(input: unknown) {
 ## Testing Pattern
 
 While not fully configured, the intended pattern:
+
 - Unit tests co-located with features: `features/<domain>/**/*.test.tsx`
 - Use Vitest + Testing Library
 - Test Presenters for UI rendering
@@ -238,6 +256,7 @@ While not fully configured, the intended pattern:
 ## Import Path Aliases
 
 Use `@/` for absolute imports:
+
 - `@/features/**` - Feature slices
 - `@/shared/**` - Shared utilities and UI
 - `@/external/**` - Infrastructure layer
