@@ -41,6 +41,6 @@ export const requireAuthServer = async (): Promise<void> => {
 export const redirectIfAuthenticatedServer = async (): Promise<void> => {
   const authenticated = await isAuthenticatedServer()
   if (authenticated) {
-    redirect('/playground')
+    redirect('/')
   }
 }
