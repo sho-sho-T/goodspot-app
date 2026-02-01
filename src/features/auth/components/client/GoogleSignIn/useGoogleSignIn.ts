@@ -21,7 +21,7 @@ export const useGoogleSignIn = (): GoogleSignInPresenterProps => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
+          redirectTo: `${window.location.origin}/auth/oauth?next=/`,
         },
       })
 
