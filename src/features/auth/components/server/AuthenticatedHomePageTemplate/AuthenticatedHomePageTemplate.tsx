@@ -18,10 +18,7 @@ export const AuthenticatedHomePageTemplate = async () => {
             className="h-16 w-16 rounded-full object-cover"
           />
         ) : (
-          <div
-            className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-200 text-zinc-600"
-            aria-label="No avatar available"
-          >
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-200 text-zinc-600">
             ?
           </div>
         )}
