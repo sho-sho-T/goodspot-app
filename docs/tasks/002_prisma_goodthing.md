@@ -9,7 +9,7 @@ status: done
 
 ## 作業内容
 
-1. `src/external/db/prisma/schema.prisma` に `GoodThing` モデルを追加。
+1. `src/external/client/db/prisma/schema.prisma` に `GoodThing` モデルを追加。
 2. `Profile` と関連付け（認証必須のため `userId` は null 禁止）。
 3. 掲示板/履歴の取得性能を考慮した index を追加。
 4. Prisma migration を作成。
@@ -52,5 +52,5 @@ model GoodThing {
 
 ## 影響ファイル
 
-- 変更: `src/external/db/prisma/schema.prisma`
-- 追加: `src/external/db/prisma/migrations/*`
+- 変更: `src/external/client/db/prisma/schema.prisma`
+- 追加: `src/external/client/db/prisma/migrations/*`
