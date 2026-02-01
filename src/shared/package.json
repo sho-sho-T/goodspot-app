@@ -1,0 +1,6 @@
+{
+  "name": "@goodspot/shared-layer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cross-cutting UI and utilities"
+}

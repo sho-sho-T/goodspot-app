@@ -1,7 +1,7 @@
-import { LoginPageTemplate } from '@/features/auth/components/server/LoginPageTemplate'
+import { LoginPageTemplate } from '@/features/auth/components/server/LoginPageTemplate';
 
 const LoginPage = (_props: PageProps<'/login'>) => {
-  return <LoginPageTemplate />
-}
+  return <LoginPageTemplate />;
+};
 
-export default LoginPage
+export default LoginPage;

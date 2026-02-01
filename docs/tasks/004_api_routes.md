@@ -10,7 +10,7 @@ status: todo
 ## 作業内容
 
 1. `src/app/api` に route handlers を追加。
-2. handler から `src/external/handlers/*` を呼び出す。
+2. route handler から `src/external/handler/recording` / `src/external/handler/board` を呼び出す。
 3. 認証必須の API では Supabase のユーザー情報を取得し、未認証は 401。
 
 ## 追加するAPI

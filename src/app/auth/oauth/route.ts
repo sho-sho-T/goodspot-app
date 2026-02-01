@@ -1,42 +1,38 @@
-import { NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
-const ALLOWED_NEXT_PATHS = ['/']
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY!
+const ALLOWED_NEXT_PATHS = ['/'];
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
 
-const isLocalEnv = process.env.NODE_ENV === 'development'
-const isProductionEnv = process.env.NODE_ENV === 'production'
+const isLocalEnv = process.env.NODE_ENV === 'development';
+const isProductionEnv = process.env.NODE_ENV === 'production';
 
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 30 // 30 days
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
 const getValidatedNextPath = (next: string | null): string => {
   if (!next?.startsWith('/') || !ALLOWED_NEXT_PATHS.includes(next)) {
-    return '/'
+    return '/';
   }
-  return next
-}
+  return next;
+};
 
-const buildRedirectUrl = (
-  origin: string,
-  forwardedHost: string | null,
-  next: string
-): string => {
+const buildRedirectUrl = (origin: string, forwardedHost: string | null, next: string): string => {
   if (isLocalEnv) {
-    return `${origin}${next}`
+    return `${origin}${next}`;
   }
-  return forwardedHost ? `https://${forwardedHost}${next}` : `${origin}${next}`
-}
+  return forwardedHost ? `https://${forwardedHost}${next}` : `${origin}${next}`;
+};
 
 const initSupabaseClient = async () => {
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
   return createServerClient(SUPABASE_URL, SUPABASE_KEY, {
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll: (cookiesToSet) =>
         cookiesToSet.forEach(({ name, value, options }) => {
-          cookieStore.set(name, value, options)
+          cookieStore.set(name, value, options);
         }),
     },
     cookieOptions: {
@@ -46,27 +42,27 @@ const initSupabaseClient = async () => {
       sameSite: 'lax', // CSRF対策
       maxAge: COOKIE_MAX_AGE,
     },
-  })
-}
+  });
+};
 
 export const GET = async (request: Request) => {
-  const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get('code')
-  const forwardedHost = request.headers.get('x-forwarded-host')
+  const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get('code');
+  const forwardedHost = request.headers.get('x-forwarded-host');
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/error`)
+    return NextResponse.redirect(`${origin}/error`);
   }
 
-  const next = getValidatedNextPath(searchParams.get('next'))
-  const supabase = await initSupabaseClient()
+  const next = getValidatedNextPath(searchParams.get('next'));
+  const supabase = await initSupabaseClient();
 
-  const { error } = await supabase.auth.exchangeCodeForSession(code)
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    return NextResponse.redirect(`${origin}/error`)
+    return NextResponse.redirect(`${origin}/error`);
   }
 
-  const redirectUrl = buildRedirectUrl(origin, forwardedHost, next)
-  return NextResponse.redirect(redirectUrl)
-}
+  const redirectUrl = buildRedirectUrl(origin, forwardedHost, next);
+  return NextResponse.redirect(redirectUrl);
+};

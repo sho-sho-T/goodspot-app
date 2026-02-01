@@ -1,8 +1,8 @@
-import 'server-only'
+import 'server-only';
 
-import type { User } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js';
 
-import { createAuthClient } from '@/external/client/supabase/server'
+import { createAuthClient } from '@/external/client/supabase/server';
 
 /**
  * サーバー側でSupabaseのセッションを取得する薄いラッパー
@@ -11,18 +11,18 @@ import { createAuthClient } from '@/external/client/supabase/server'
  * @returns セッション情報（ユーザーが存在する場合）またはnull
  */
 export const getSessionServer = async () => {
-  const supabase = await createAuthClient()
+  const supabase = await createAuthClient();
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (error || !user) {
-    return null
+    return null;
   }
 
-  return { user }
-}
+  return { user };
+};
 
 /**
  * 認証済みが前提のセッション取得関数
@@ -32,12 +32,12 @@ export const getSessionServer = async () => {
  * @returns セッション情報
  */
 export const requireSessionServer = async () => {
-  const session = await getSessionServer()
+  const session = await getSessionServer();
   if (!session) {
-    throw new Error('Session not found despite authenticated context')
+    throw new Error('Session not found despite authenticated context');
   }
-  return session
-}
+  return session;
+};
 
 /**
  * ユーザーのアバターURLを取得する
@@ -49,10 +49,10 @@ export const requireSessionServer = async () => {
  */
 export const getAvatarUrl = (user: User): string | null => {
   if (typeof user.user_metadata?.avatar_url === 'string') {
-    return user.user_metadata.avatar_url
+    return user.user_metadata.avatar_url;
   }
   if (typeof user.user_metadata?.picture === 'string') {
-    return user.user_metadata.picture
+    return user.user_metadata.picture;
   }
-  return null
-}
+  return null;
+};

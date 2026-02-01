@@ -1,1 +1,1 @@
-export * from './PlaygroundPageTemplate'
+export * from './PlaygroundPageTemplate';

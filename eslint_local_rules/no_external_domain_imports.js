@@ -3,8 +3,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description:
-        "externalレイヤー以外から '@/external/domain/**' をインポートすることを禁止する",
+      description: "externalレイヤー以外から '@/external/domain/**' をインポートすることを禁止する",
       category: 'Best Practices',
       recommended: false,
     },
@@ -17,21 +16,15 @@ module.exports = {
   create(context) {
     // '@/external/domain/**' からのインポートを検知し、違反を報告する
     function reportIfExternalDomainImport(source, node) {
-      if (
-        typeof source === 'string' &&
-        source.startsWith('@/external/domain/')
-      ) {
-        context.report({ node, messageId: 'noExternalDomain' })
+      if (typeof source === 'string' && source.startsWith('@/external/domain/')) {
+        context.report({ node, messageId: 'noExternalDomain' });
       }
     }
 
     return {
       ImportDeclaration(node) {
         // ESM import のパスをチェック
-        reportIfExternalDomainImport(
-          node.source && node.source.value,
-          node.source || node
-        )
+        reportIfExternalDomainImport(node.source && node.source.value, node.source || node);
       },
       CallExpression(node) {
         // CommonJS の require 呼び出しも対象にする
@@ -41,12 +34,12 @@ module.exports = {
           node.arguments &&
           node.arguments.length === 1
         ) {
-          const arg = node.arguments[0]
+          const arg = node.arguments[0];
           if (arg && arg.type === 'Literal') {
-            reportIfExternalDomainImport(arg.value, arg)
+            reportIfExternalDomainImport(arg.value, arg);
           }
         }
       },
-    }
+    };
   },
-}
+};

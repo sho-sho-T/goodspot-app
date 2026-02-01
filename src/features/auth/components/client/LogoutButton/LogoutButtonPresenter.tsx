@@ -1,11 +1,9 @@
-'use client'
+'use client';
 
-import { Button } from '@/shared/components/ui/button'
+import { Button } from '@/shared/components/ui/button';
 
-import { LogoutButtonPresenterProps } from './useLogoutButton'
+import type { LogoutButtonPresenterProps } from './useLogoutButton';
 
-export const LogoutButtonPresenter = ({
-  onLogout,
-}: LogoutButtonPresenterProps) => {
-  return <Button onClick={onLogout}>Logout</Button>
-}
+export const LogoutButtonPresenter = ({ onLogout }: LogoutButtonPresenterProps) => {
+  return <Button onClick={onLogout}>Logout</Button>;
+};

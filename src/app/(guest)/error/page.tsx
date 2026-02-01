@@ -1,7 +1,7 @@
-import { ErrorPageTemplate } from '@/features/system/components/server/ErrorPageTemplate'
+import { ErrorPageTemplate } from '@/features/system/components/server/ErrorPageTemplate';
 
 const ErrorPage = () => {
-  return <ErrorPageTemplate />
-}
+  return <ErrorPageTemplate />;
+};
 
-export default ErrorPage
+export default ErrorPage;

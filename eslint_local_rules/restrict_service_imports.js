@@ -16,30 +16,28 @@ module.exports = {
   create(context) {
     return {
       ImportDeclaration(node) {
-        const importPath = node.source.value
-        const filename = context.getFilename()
+        const importPath = node.source.value;
+        const filename = context.getFilename();
 
         // external/services 配下からの import でなければスキップ
         if (!importPath.includes('/external/services/')) {
-          return
+          return;
         }
 
         // handlers/<domain>/<name>.command.ts / .query.ts のみ許可
-        const isHandlerCommand =
-          /\/external\/handlers\/[^/]+\/[^/]+\.command\.ts$/.test(filename)
-        const isHandlerQuery =
-          /\/external\/handlers\/[^/]+\/[^/]+\.query\.ts$/.test(filename)
+        const isHandlerCommand = /\/external\/handlers\/[^/]+\/[^/]+\.command\.ts$/.test(filename);
+        const isHandlerQuery = /\/external\/handlers\/[^/]+\/[^/]+\.query\.ts$/.test(filename);
 
         if (isHandlerCommand || isHandlerQuery) {
-          return
+          return;
         }
 
         // その他のファイルで import していたら報告
         context.report({
           node,
           messageId: 'invalidServiceImport',
-        })
+        });
       },
-    }
+    };
   },
-}
+};

@@ -1,31 +1,22 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import {
-  Clock,
-  FlaskConical,
-  LucideIcon,
-  MessageSquare,
-  Sun,
-} from 'lucide-react'
+import { Clock, FlaskConical, type LucideIcon, MessageSquare, Sun } from 'lucide-react';
+import Link from 'next/link';
 
-import type { SidebarPresenterProps } from './useSidebarNav'
+import type { SidebarPresenterProps } from './useSidebarNav';
 
 const iconMap: Record<string, LucideIcon> = {
   Sun,
   Clock,
   MessageSquare,
   FlaskConical,
-}
+};
 
 /**
  * Sidebarのプレゼンテーションコンポーネント
  * 純粋なUI表示のみを担当
  */
-export const SidebarPresenter = ({
-  navItems,
-  currentPath,
-}: SidebarPresenterProps) => {
+export const SidebarPresenter = ({ navItems, currentPath }: SidebarPresenterProps) => {
   return (
     <aside className="bg-muted/40 flex w-60 flex-col border-r">
       <div className="px-6 py-4">
@@ -33,8 +24,8 @@ export const SidebarPresenter = ({
       </div>
       <nav className="flex-1 space-y-1 px-3">
         {navItems.map((item) => {
-          const Icon = iconMap[item.icon]
-          const isActive = currentPath.startsWith(item.href)
+          const Icon = iconMap[item.icon];
+          const isActive = currentPath.startsWith(item.href);
 
           return (
             <Link
@@ -49,9 +40,9 @@ export const SidebarPresenter = ({
               {Icon && <Icon className="h-4 w-4" />}
               {item.label}
             </Link>
-          )
+          );
         })}
       </nav>
     </aside>
-  )
-}
+  );
+};

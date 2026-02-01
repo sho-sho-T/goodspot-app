@@ -1,13 +1,10 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
-import {
-  getAvatarUrl,
-  requireSessionServer,
-} from '@/features/auth/servers/session.server'
+import { getAvatarUrl, requireSessionServer } from '@/features/auth/servers/session.server';
 
 export const AuthenticatedHomePageTemplate = async () => {
-  const { user } = await requireSessionServer()
-  const avatarUrl = getAvatarUrl(user)
+  const { user } = await requireSessionServer();
+  const avatarUrl = getAvatarUrl(user);
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
@@ -21,10 +18,7 @@ export const AuthenticatedHomePageTemplate = async () => {
             className="h-16 w-16 rounded-full object-cover"
           />
         ) : (
-          <div
-            className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-200 text-zinc-600"
-            aria-label="No avatar available"
-          >
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-200 text-zinc-600">
             ?
           </div>
         )}
@@ -34,5 +28,5 @@ export const AuthenticatedHomePageTemplate = async () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { PlaygroundPresenter } from './PlaygroundPresenter'
-import { usePlayground } from './usePlayground'
+import { PlaygroundPresenter } from './PlaygroundPresenter';
+import { usePlayground } from './usePlayground';
 
 export const PlaygroundContainer = () => {
   const {
@@ -15,7 +15,7 @@ export const PlaygroundContainer = () => {
     onCreate,
     onUpdate,
     onDelete,
-  } = usePlayground()
+  } = usePlayground();
 
   return (
     <PlaygroundPresenter
@@ -30,5 +30,5 @@ export const PlaygroundContainer = () => {
       isUpdating={isUpdating}
       isDeleting={isDeleting}
     />
-  )
-}
+  );
+};

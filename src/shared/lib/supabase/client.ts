@@ -1,4 +1,4 @@
-import { createBrowserClient } from '@supabase/ssr'
+import { createBrowserClient } from '@supabase/ssr';
 
 /**
  * クライアントサイド（Client Components）で使用するSupabaseクライアントです。
@@ -10,4 +10,4 @@ import { createBrowserClient } from '@supabase/ssr'
 export const supabaseAuthClient = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_KEY!
-)
+);

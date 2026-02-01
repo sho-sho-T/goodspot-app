@@ -1,15 +1,15 @@
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import { requireAuthServer } from '@/features/auth/servers/redirect.server'
+import { requireAuthServer } from '@/features/auth/servers/redirect.server';
 
-import { getQueryClient } from '@/shared/lib/query-client'
+import { getQueryClient } from '@/shared/lib/query-client';
 
-import { Header } from '../../client/Header'
-import { Sidebar } from '../../client/Sidebar'
+import { Header } from '../../client/Header';
+import { Sidebar } from '../../client/Sidebar';
 
 type AuthenticatedLayoutWrapperProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 /**
  * 認証が必要なページ群のサーバー側ゲート + 共通レイアウトラッパー
@@ -19,15 +19,13 @@ type AuthenticatedLayoutWrapperProps = {
  * 2. React Query の初期状態をサーバーで用意し、クライアントで安全に水和
  * 3. Header/Sidebar を含む共通 UI 構成を提供
  */
-export const AuthenticatedLayoutWrapper = async ({
-  children,
-}: AuthenticatedLayoutWrapperProps) => {
+export const AuthenticatedLayoutWrapper = async ({ children }: AuthenticatedLayoutWrapperProps) => {
   // サーバー側で認証チェック（未認証なら /login へリダイレクト）
-  await requireAuthServer()
+  await requireAuthServer();
 
   // QueryClient 生成 + dehydrate
-  const queryClient = getQueryClient()
-  const dehydratedState = dehydrate(queryClient)
+  const queryClient = getQueryClient();
+  const dehydratedState = dehydrate(queryClient);
 
   // HydrationBoundary + 共通レイアウト
   return (
@@ -40,5 +38,5 @@ export const AuthenticatedLayoutWrapper = async ({
         </div>
       </div>
     </HydrationBoundary>
-  )
-}
+  );
+};

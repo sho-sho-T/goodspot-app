@@ -4,8 +4,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card'
-import { GoogleSignIn } from '../../client/GoogleSignIn/GoogleSignIn'
+} from '@/shared/components/ui/card';
+import { GoogleSignIn } from '../../client/GoogleSignIn/GoogleSignIn';
 
 export const LoginPageTemplate = () => {
   return (
@@ -24,5 +24,5 @@ export const LoginPageTemplate = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

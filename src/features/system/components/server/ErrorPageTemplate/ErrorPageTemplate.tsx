@@ -1,12 +1,6 @@
-import { Button } from '@/shared/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/shared/components/ui/card'
-import Link from 'next/link'
+import Link from 'next/link';
+import { Button } from '@/shared/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/components/ui/card';
 
 /**
  * 認証エラーが発生した場合に表示する画面（認証エラーのみのはず）
@@ -17,9 +11,7 @@ export const ErrorPageTemplate = () => {
       <div className="w-full max-w-sm">
         <Card className="text-center">
           <CardHeader>
-            <CardTitle className="text-destructive text-2xl font-bold">
-              Error
-            </CardTitle>
+            <CardTitle className="text-destructive text-2xl font-bold">Error</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
@@ -36,5 +28,5 @@ export const ErrorPageTemplate = () => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};

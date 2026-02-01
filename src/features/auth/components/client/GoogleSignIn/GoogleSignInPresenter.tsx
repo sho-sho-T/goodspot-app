@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { Button } from '@/shared/components/ui/button'
+import { Button } from '@/shared/components/ui/button';
 
-import { GoogleSignInPresenterProps } from './useGoogleSignIn'
+import type { GoogleSignInPresenterProps } from './useGoogleSignIn';
 
 export const GoogleSignInPresenter = (props: GoogleSignInPresenterProps) => {
-  const { error, isLoading, onSubmit } = props
+  const { error, isLoading, onSubmit } = props;
 
   return (
     <form onSubmit={onSubmit}>
@@ -16,5 +16,5 @@ export const GoogleSignInPresenter = (props: GoogleSignInPresenterProps) => {
         </Button>
       </div>
     </form>
-  )
-}
+  );
+};

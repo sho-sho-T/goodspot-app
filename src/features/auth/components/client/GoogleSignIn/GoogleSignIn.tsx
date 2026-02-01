@@ -1,3 +1,3 @@
-'use client'
+'use client';
 
-export { GoogleSignInContainer as GoogleSignIn } from './GoogleSignInContainer'
+export { GoogleSignInContainer as GoogleSignIn } from './GoogleSignInContainer';
