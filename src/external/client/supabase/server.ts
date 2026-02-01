@@ -1,8 +1,7 @@
-import 'server-only'
+import 'server-only';
 
-import { cookies } from 'next/headers'
-
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 /**
  * Next.jsのサーバーサイド（Server Components, Server Actions, Route Handlers）で
@@ -11,7 +10,7 @@ import { createServerClient } from '@supabase/ssr'
  * ユーザーの認証情報（Cookie）を自動的に処理し、認証済みの状態でSupabaseにアクセスできます。
  */
 export const createAuthClient = async () => {
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,13 +18,13 @@ export const createAuthClient = async () => {
     {
       cookies: {
         getAll() {
-          return cookieStore.getAll()
+          return cookieStore.getAll();
         },
         setAll(cookiesToSet) {
           try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
           } catch {
             // Server Components（RSC）から呼び出された場合、Cookieの操作はできないためエラーが発生します。
             // ここではそのエラーを無視することで、RSCでもクライアント作成自体は成功するようにしています。
@@ -35,5 +34,5 @@ export const createAuthClient = async () => {
         },
       },
     }
-  )
-}
+  );
+};

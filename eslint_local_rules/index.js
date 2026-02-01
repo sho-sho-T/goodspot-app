@@ -7,4 +7,4 @@ module.exports = {
   'restrict-action-imports': require('./restrict_action_imports'),
   'use-nextjs-helpers': require('./use_nextjs_helpers'),
   'no-external-domain-imports': require('./no_external_domain_imports'),
-}
+};

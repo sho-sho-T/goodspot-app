@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { PlaygroundItem } from '@/external/dto/playground'
-import { FormEvent } from 'react'
+import type { FormEvent } from 'react';
+import type { PlaygroundItem } from '@/external/dto/playground';
 
 type PlaygroundPresenterProps = {
-  items: PlaygroundItem[]
-  total: number
-  isLoading: boolean
-  errorMessage?: string
-  isCreating: boolean
-  isUpdating: boolean
-  isDeleting: boolean
-  onCreate: (event: FormEvent<HTMLFormElement>) => void
-  onUpdate: (id: string) => void
-  onDelete: (id: string) => void
-}
+  items: PlaygroundItem[];
+  total: number;
+  isLoading: boolean;
+  errorMessage?: string;
+  isCreating: boolean;
+  isUpdating: boolean;
+  isDeleting: boolean;
+  onCreate: (event: FormEvent<HTMLFormElement>) => void;
+  onUpdate: (id: string) => void;
+  onDelete: (id: string) => void;
+};
 
 export const PlaygroundPresenter = ({
   items,
@@ -91,12 +91,9 @@ export const PlaygroundPresenter = ({
               <div>
                 <div className="text-lg font-bold">{item.name}</div>
                 <div className="text-sm text-gray-500">
-                  Value:{' '}
-                  <span className="font-mono text-blue-600">{item.value}</span>
+                  Value: <span className="font-mono text-blue-600">{item.value}</span>
                 </div>
-                <div className="mt-1 font-mono text-xs text-gray-400">
-                  {item.id}
-                </div>
+                <div className="mt-1 font-mono text-xs text-gray-400">{item.id}</div>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
@@ -126,5 +123,5 @@ export const PlaygroundPresenter = ({
         )}
       </div>
     </div>
-  )
-}
+  );
+};

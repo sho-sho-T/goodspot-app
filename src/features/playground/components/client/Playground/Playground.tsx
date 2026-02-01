@@ -1,3 +1,3 @@
-'use client'
+'use client';
 
-export { PlaygroundContainer as Playground } from './PlaygroundContainer'
+export { PlaygroundContainer as Playground } from './PlaygroundContainer';

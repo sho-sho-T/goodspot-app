@@ -1,0 +1,10 @@
+{
+  "name": "@goodspot/features-layer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Domain layer - feature slices with UI and logic",
+  "dependencies": {
+    "@goodspot/external-layer": "*",
+    "@goodspot/shared-layer": "*"
+  }
+}

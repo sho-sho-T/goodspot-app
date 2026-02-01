@@ -16,6 +16,13 @@ This is the **routing layer**. Keep it thin.
 - Import from `@/external/` (use features as proxy)
 - Add 'use client' (routes are Server Components by default)
 
+## IMPORTANT: Manual Directive Checks
+
+Routes in app/ are Server Components by default (no 'use client').
+If you need client interactivity, create a client component in features/ instead.
+
+**Note:** Directive checking is not automated. Verify in code review.
+
 ## Route Groups
 
 - `(guest)/` - Unauthenticated routes (login, register)

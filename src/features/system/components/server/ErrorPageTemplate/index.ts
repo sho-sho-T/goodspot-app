@@ -1,1 +1,1 @@
-export * from './ErrorPageTemplate'
+export * from './ErrorPageTemplate';

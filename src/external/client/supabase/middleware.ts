@@ -1,10 +1,8 @@
-import 'server-only'
+import 'server-only';
 
-import { NextResponse } from 'next/server'
-
-import { createServerClient } from '@supabase/ssr'
-
-import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 /**
  * Supabaseのセッションを更新するためのミドルウェア関数です。
@@ -15,7 +13,7 @@ import type { NextRequest } from 'next/server'
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
-  })
+  });
 
   // グローバル変数にクライアントを保持せず、リクエストごとに新しいクライアントを作成してください。
   // これにより、異なるユーザーのリクエスト間で認証情報が混在するのを防ぎます。
@@ -25,24 +23,22 @@ export async function updateSession(request: NextRequest) {
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll()
+          return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
           // Cookieをリクエストとレスポンスの両方に設定します。
           // これにより、後続の処理でも更新されたCookieが利用可能になります。
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          )
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({
             request,
-          })
+          });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
-          )
+          );
         },
       },
     }
-  )
+  );
 
   // createServerClientとsupabase.auth.getClaims()の間には、他の処理を挟まないでください。
   // ここで処理が入ると、予期せぬタイミングでユーザーがログアウトされるなどの問題が発生し、
@@ -50,8 +46,8 @@ export async function updateSession(request: NextRequest) {
 
   // 重要: getClaims()（またはgetUser()）を削除しないでください。
   // これを呼び出すことで、必要に応じてAuthトークンがリフレッシュされ、Cookieが更新されます。
-  const { data } = await supabase.auth.getClaims()
-  const user = data?.claims
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims;
 
   if (
     !user &&
@@ -62,9 +58,9 @@ export async function updateSession(request: NextRequest) {
   ) {
     // ユーザーが認証されておらず、かつログインページや認証関連のパスでない場合、
     // ログインページへリダイレクトします。
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
   }
 
   // 重要: ここで作成した supabaseResponse オブジェクトをそのまま返す必要があります。
@@ -75,5 +71,5 @@ export async function updateSession(request: NextRequest) {
   // 4. 最後に myNewResponse を返す
   // これを守らないと、ブラウザとサーバーでセッションの不整合が起き、ユーザーがログアウトされる可能性があります。
 
-  return supabaseResponse
+  return supabaseResponse;
 }

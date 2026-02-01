@@ -1,1 +1,1 @@
-export * from './AuthenticatedHomePageTemplate'
+export * from './AuthenticatedHomePageTemplate';

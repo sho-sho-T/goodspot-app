@@ -1,3 +1,3 @@
-'use client'
+'use client';
 
-export { LogoutButtonContainer as LogoutButton } from './LogoutButtonContainer'
+export { LogoutButtonContainer as LogoutButton } from './LogoutButtonContainer';

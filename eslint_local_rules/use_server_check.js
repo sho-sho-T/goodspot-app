@@ -10,10 +10,10 @@ module.exports = {
     schema: [],
   },
   create(context) {
-    const filename = context.filename || context.getFilename()
+    const filename = context.filename || context.getFilename();
 
     if (!filename.endsWith('.action.ts')) {
-      return {}
+      return {};
     }
 
     return {
@@ -25,7 +25,7 @@ module.exports = {
             statement.expression &&
             statement.expression.type === 'Literal' &&
             statement.expression.value === 'use server'
-        )
+        );
 
         if (useServerStatements.length === 0) {
           // 1 つも無ければ先頭に追加する修正を提案
@@ -34,13 +34,13 @@ module.exports = {
             loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
             message: `*.action.ts files must start with 'use server' directive`,
             fix(fixer) {
-              return fixer.insertTextBeforeRange([0, 0], "'use server'\n\n")
+              return fixer.insertTextBeforeRange([0, 0], "'use server'\n\n");
             },
-          })
-          return
+          });
+          return;
         }
 
-        const firstStatement = node.body[0]
+        const firstStatement = node.body[0];
         if (
           !(
             firstStatement &&
@@ -55,9 +55,9 @@ module.exports = {
             node: firstStatement || node,
             message: `*.action.ts files must start with 'use server' directive`,
             fix(fixer) {
-              return fixer.insertTextBeforeRange([0, 0], "'use server'\n\n")
+              return fixer.insertTextBeforeRange([0, 0], "'use server'\n\n");
             },
-          })
+          });
         }
 
         // 複数存在していたら 2 つ目以降を削除
@@ -66,11 +66,11 @@ module.exports = {
             node: statement,
             message: "Duplicate 'use server' directive",
             fix(fixer) {
-              return fixer.remove(statement)
+              return fixer.remove(statement);
             },
-          })
-        })
+          });
+        });
       },
-    }
+    };
   },
-}
+};

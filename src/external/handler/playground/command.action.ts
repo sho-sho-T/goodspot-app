@@ -1,46 +1,44 @@
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
-
-import {
-  createPlaygroundServer,
-  deletePlaygroundServer,
-  updatePlaygroundValueServer,
-} from './command.server'
-
+import { revalidatePath } from 'next/cache';
 import type {
   CreatePlaygroundInput,
   DeletePlaygroundInput,
   PlaygroundCommandResponse,
   UpdatePlaygroundInput,
-} from './command.server'
+} from './command.server';
+import {
+  createPlaygroundServer,
+  deletePlaygroundServer,
+  updatePlaygroundValueServer,
+} from './command.server';
 
 // Playground の Server Actions（変更系）
 export async function createPlaygroundAction(
   data: CreatePlaygroundInput
 ): Promise<PlaygroundCommandResponse> {
-  const result = await createPlaygroundServer(data)
-  revalidatePath('/playground')
+  const result = await createPlaygroundServer(data);
+  revalidatePath('/playground');
 
-  return result
+  return result;
 }
 
 export async function updatePlaygroundValueAction(
   data: UpdatePlaygroundInput
 ): Promise<PlaygroundCommandResponse> {
-  const result = await updatePlaygroundValueServer(data)
-  revalidatePath('/playground')
+  const result = await updatePlaygroundValueServer(data);
+  revalidatePath('/playground');
 
-  return result
+  return result;
 }
 
 export async function deletePlaygroundAction(
   data: DeletePlaygroundInput
 ): Promise<PlaygroundCommandResponse> {
-  const result = await deletePlaygroundServer(data)
-  revalidatePath('/playground')
+  const result = await deletePlaygroundServer(data);
+  revalidatePath('/playground');
 
-  return result
+  return result;
 }
 
 export type {
@@ -48,4 +46,4 @@ export type {
   DeletePlaygroundInput,
   PlaygroundCommandResponse,
   UpdatePlaygroundInput,
-} from './command.server'
+} from './command.server';

@@ -1,8 +1,8 @@
-import 'server-only'
+import 'server-only';
 
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
-import { getSessionServer } from './session.server'
+import { getSessionServer } from './session.server';
 
 /**
  * サーバー側で認証状態を判定する
@@ -12,12 +12,12 @@ import { getSessionServer } from './session.server'
  */
 export const isAuthenticatedServer = async (): Promise<boolean> => {
   try {
-    const session = await getSessionServer()
-    return !!session?.user
+    const session = await getSessionServer();
+    return !!session?.user;
   } catch {
-    return false
+    return false;
   }
-}
+};
 
 /**
  * 認証が必要なページで使用するガード関数
@@ -26,11 +26,11 @@ export const isAuthenticatedServer = async (): Promise<boolean> => {
  * @throws redirect() による例外（Next.jsのリダイレクト機構）
  */
 export const requireAuthServer = async (): Promise<void> => {
-  const authenticated = await isAuthenticatedServer()
+  const authenticated = await isAuthenticatedServer();
   if (!authenticated) {
-    redirect('/login')
+    redirect('/login');
   }
-}
+};
 
 /**
  * 認証済みユーザーを別ページにリダイレクトする
@@ -39,8 +39,8 @@ export const requireAuthServer = async (): Promise<void> => {
  * @throws redirect() による例外（Next.jsのリダイレクト機構）
  */
 export const redirectIfAuthenticatedServer = async (): Promise<void> => {
-  const authenticated = await isAuthenticatedServer()
+  const authenticated = await isAuthenticatedServer();
   if (authenticated) {
-    redirect('/')
+    redirect('/');
   }
-}
+};

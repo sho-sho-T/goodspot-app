@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { GoogleSignInPresenter } from './GoogleSignInPresenter'
-import { useGoogleSignIn } from './useGoogleSignIn'
+import { GoogleSignInPresenter } from './GoogleSignInPresenter';
+import { useGoogleSignIn } from './useGoogleSignIn';
 
 export const GoogleSignInContainer = () => {
-  const state = useGoogleSignIn()
+  const state = useGoogleSignIn();
 
-  return <GoogleSignInPresenter {...state} />
-}
+  return <GoogleSignInPresenter {...state} />;
+};

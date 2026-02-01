@@ -8,6 +8,14 @@ This is the **infrastructure layer**. Server-only.
 - NEVER import from `@/app/` or `@/features/`
 - Features ONLY import from `handler/` and `dto/`
 
+## IMPORTANT: Directive Requirements
+
+- **Server Actions** (`*.action.ts`) → MUST have `'use server'` at top
+- **All other files** → MUST have `import 'server-only'` at top
+- These directives prevent accidental client-side bundling
+
+**Note:** Directive checking is not automated. Verify manually or in code review.
+
 ## Layer Flow
 
 ```

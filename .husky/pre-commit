@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Biome checks
+npx biome check --staged --no-errors-on-unmatched
+
+# Manual directive pattern checks
+echo "Checking for missing 'use server' in *.action.ts files..."
+git diff --cached --name-only --diff-filter=ACM | \
+  grep '\.action\.ts$' | \
+  while read file; do
+    if ! head -5 "$file" | grep -q "'use server'"; then
+      echo "ERROR: $file is missing 'use server' directive"
+      exit 1
+    fi
+  done
+
+echo "Checking for missing 'use client' in /client/ components..."
+git diff --cached --name-only --diff-filter=ACM | \
+  grep '/client/.*\.tsx$' | \
+  while read file; do
+    if ! head -5 "$file" | grep -q "'use client'"; then
+      echo "WARNING: $file in /client/ directory may need 'use client' directive"
+    fi
+  done

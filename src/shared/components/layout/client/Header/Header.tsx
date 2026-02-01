@@ -1,3 +1,3 @@
-'use client'
+'use client';
 
-export { HeaderContainer as Header } from './HeaderContainer'
+export { HeaderContainer as Header } from './HeaderContainer';

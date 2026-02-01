@@ -1,13 +1,13 @@
-import 'server-only'
+import 'server-only';
 
-import { prisma } from '@/external/client/db/client'
-import { Playground, PlaygroundId } from '@/external/domain/playground'
+import { prisma } from '@/external/client/db/client';
 import type {
   PlaygroundCreateInput,
   PlaygroundListQuery,
   PlaygroundRepository as PlaygroundRepositoryInterface,
   PlaygroundUpdateInput,
-} from '@/external/domain/playground'
+} from '@/external/domain/playground';
+import { Playground, PlaygroundId } from '@/external/domain/playground';
 
 // Playground の DB 永続化
 export class PlaygroundRepository implements PlaygroundRepositoryInterface {
@@ -16,7 +16,7 @@ export class PlaygroundRepository implements PlaygroundRepositoryInterface {
       orderBy: { createdAt: 'desc' },
       take: query?.limit,
       skip: query?.offset,
-    })
+    });
 
     return rows.map((row) =>
       Playground.restore({
@@ -26,11 +26,11 @@ export class PlaygroundRepository implements PlaygroundRepositoryInterface {
         createdAt: row.createdAt,
         updatedAt: row.updatedAt,
       })
-    )
+    );
   }
 
   async count(): Promise<number> {
-    return prisma.playground.count()
+    return prisma.playground.count();
   }
 
   async create(input: PlaygroundCreateInput): Promise<Playground> {
@@ -39,7 +39,7 @@ export class PlaygroundRepository implements PlaygroundRepositoryInterface {
         name: input.name,
         value: input.value,
       },
-    })
+    });
 
     return Playground.restore({
       id: PlaygroundId.create(row.id),
@@ -47,14 +47,14 @@ export class PlaygroundRepository implements PlaygroundRepositoryInterface {
       value: row.value,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
-    })
+    });
   }
 
   async updateValue(input: PlaygroundUpdateInput): Promise<Playground> {
     const row = await prisma.playground.update({
       where: { id: input.id.toString() },
       data: { value: input.value },
-    })
+    });
 
     return Playground.restore({
       id: PlaygroundId.create(row.id),
@@ -62,12 +62,12 @@ export class PlaygroundRepository implements PlaygroundRepositoryInterface {
       value: row.value,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
-    })
+    });
   }
 
   async delete(id: PlaygroundId): Promise<void> {
     await prisma.playground.delete({
       where: { id: id.toString() },
-    })
+    });
   }
 }

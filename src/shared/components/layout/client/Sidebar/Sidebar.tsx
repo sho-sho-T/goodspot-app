@@ -1,3 +1,3 @@
-'use client'
+'use client';
 
-export { SidebarContainer as Sidebar } from './SidebarContainer'
+export { SidebarContainer as Sidebar } from './SidebarContainer';

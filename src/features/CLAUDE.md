@@ -29,6 +29,14 @@ features/<domain>/
 - Mix client state logic in Presenters
 - Call Server Actions directly in components (use hooks)
 
+## IMPORTANT: Directive Requirements
+
+- **Client components** in `/client/` directories → MUST have `'use client'` at top
+- **Server actions** in `*.action.ts` files → MUST have `'use server'` at top
+- **Server-only files** (handlers, services) → MUST have `import 'server-only'`
+
+**Note:** These are not auto-checked by linter. Verify manually or in code review.
+
 ## Example
 
 ```tsx

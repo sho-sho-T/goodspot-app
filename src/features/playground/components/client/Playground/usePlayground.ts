@@ -1,123 +1,115 @@
-import type { FormEvent } from 'react'
-import { useCallback, useMemo } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-
-import { usePlaygroundListQuery } from '@/features/playground/hooks/query/usePlaygroundListQuery'
-import { playgroundQueryKeys } from '@/features/playground/queries/keys'
-
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { FormEvent } from 'react';
+import { useCallback, useMemo } from 'react';
+import type { PlaygroundCommandResponse, PlaygroundItem } from '@/external/dto/playground';
 import {
   createPlaygroundAction,
   deletePlaygroundAction,
   updatePlaygroundValueAction,
-} from '@/external/handler/playground/command.action'
-import type {
-  PlaygroundCommandResponse,
-  PlaygroundItem,
-} from '@/external/dto/playground'
+} from '@/external/handler/playground/command.action';
+import { usePlaygroundListQuery } from '@/features/playground/hooks/query/usePlaygroundListQuery';
+import { playgroundQueryKeys } from '@/features/playground/queries/keys';
 
 type PlaygroundState = {
-  items: PlaygroundItem[]
-  total: number
-  isLoading: boolean
-  errorMessage?: string
-  isCreating: boolean
-  isUpdating: boolean
-  isDeleting: boolean
-  onCreate: (event: FormEvent<HTMLFormElement>) => void
-  onUpdate: (id: string) => void
-  onDelete: (id: string) => void
-}
+  items: PlaygroundItem[];
+  total: number;
+  isLoading: boolean;
+  errorMessage?: string;
+  isCreating: boolean;
+  isUpdating: boolean;
+  isDeleting: boolean;
+  onCreate: (event: FormEvent<HTMLFormElement>) => void;
+  onUpdate: (id: string) => void;
+  onDelete: (id: string) => void;
+};
 
 const ensureSuccess = (result: PlaygroundCommandResponse, fallback: string) => {
   if (!result.success) {
-    throw new Error(result.error ?? fallback)
+    throw new Error(result.error ?? fallback);
   }
-  return result
-}
+  return result;
+};
 
 export const usePlayground = (): PlaygroundState => {
-  const queryClient = useQueryClient()
-  const { data, isLoading, error } = usePlaygroundListQuery()
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = usePlaygroundListQuery();
 
   const invalidateList = useCallback(() => {
     return queryClient.invalidateQueries({
       queryKey: playgroundQueryKeys.all,
-    })
-  }, [queryClient])
+    });
+  }, [queryClient]);
 
   const createMutation = useMutation({
     mutationFn: async (input: { name: string; value: number }) => {
-      const result = await createPlaygroundAction(input)
-      return ensureSuccess(result, 'Failed to create playground item')
+      const result = await createPlaygroundAction(input);
+      return ensureSuccess(result, 'Failed to create playground item');
     },
     onSuccess: invalidateList,
-  })
+  });
 
   const updateMutation = useMutation({
     mutationFn: async (input: { id: string; value: number }) => {
-      const result = await updatePlaygroundValueAction(input)
-      return ensureSuccess(result, 'Failed to update playground item')
+      const result = await updatePlaygroundValueAction(input);
+      return ensureSuccess(result, 'Failed to update playground item');
     },
     onSuccess: invalidateList,
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: async (input: { id: string }) => {
-      const result = await deletePlaygroundAction(input)
-      return ensureSuccess(result, 'Failed to delete playground item')
+      const result = await deletePlaygroundAction(input);
+      return ensureSuccess(result, 'Failed to delete playground item');
     },
     onSuccess: invalidateList,
-  })
+  });
 
   const handleCreate = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
-      const formData = new FormData(event.currentTarget)
-      const name = formData.get('name')
-      const value = formData.get('value')
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const name = formData.get('name');
+      const value = formData.get('value');
       if (typeof name !== 'string' || typeof value !== 'string') {
-        return
+        return;
       }
-      const numericValue = Number(value)
+      const numericValue = Number(value);
       if (Number.isNaN(numericValue)) {
-        return
+        return;
       }
 
       try {
-        await createMutation.mutateAsync({ name, value: numericValue })
-        event.currentTarget.reset()
+        await createMutation.mutateAsync({ name, value: numericValue });
+        event.currentTarget.reset();
       } catch {
         // Errors are surfaced via mutation state.
       }
     },
     [createMutation]
-  )
+  );
 
   const handleUpdate = useCallback(
     (id: string) => {
-      const nextValue = Math.floor(Math.random() * 100)
-      void updateMutation.mutateAsync({ id, value: nextValue })
+      const nextValue = Math.floor(Math.random() * 100);
+      void updateMutation.mutateAsync({ id, value: nextValue });
     },
     [updateMutation]
-  )
+  );
 
   const handleDelete = useCallback(
     (id: string) => {
-      void deleteMutation.mutateAsync({ id })
+      void deleteMutation.mutateAsync({ id });
     },
     [deleteMutation]
-  )
+  );
 
-  const items = useMemo(
-    () => (data?.success ? data.items : []),
-    [data?.items, data?.success]
-  )
+  const items = useMemo(() => (data?.success ? data.items : []), [data?.items, data?.success]);
   const total = useMemo(() => {
     if (!data?.success) {
-      return 0
+      return 0;
     }
-    return data.total ?? data.items.length
-  }, [data?.items.length, data?.success, data?.total])
+    return data.total ?? data.items.length;
+  }, [data?.items.length, data?.success, data?.total]);
 
   const errorMessage =
     data?.success === false
@@ -130,7 +122,7 @@ export const usePlayground = (): PlaygroundState => {
             ? updateMutation.error.message
             : deleteMutation.error instanceof Error
               ? deleteMutation.error.message
-              : undefined
+              : undefined;
 
   return {
     items,
@@ -143,5 +135,5 @@ export const usePlayground = (): PlaygroundState => {
     onCreate: handleCreate,
     onUpdate: handleUpdate,
     onDelete: handleDelete,
-  }
-}
+  };
+};

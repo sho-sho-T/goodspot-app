@@ -1,0 +1,10 @@
+{
+  "name": "@goodspot/app-layer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Routing layer - app router pages only",
+  "dependencies": {
+    "@goodspot/features-layer": "*",
+    "@goodspot/shared-layer": "*"
+  }
+}
